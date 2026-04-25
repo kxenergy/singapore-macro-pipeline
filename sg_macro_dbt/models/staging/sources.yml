@@ -1,0 +1,44 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw ingested data — never modified after landing"
+    schema: main
+    tables:
+      - name: bronze_cpi_raw
+        description: "Singapore CPI by category, monthly, from SingStat"
+        columns:
+          - name: cpi_category
+            description: "CPI sub-category name"
+          - name: time_period
+            description: "Month in format '2024 Jan'"
+          - name: cpi_value
+            description: "CPI index value"
+          - name: ingested_at
+            description: "Timestamp when this row was ingested"
+
+      - name: bronze_fx_raw
+        description: "SGD exchange rates, monthly, from MAS via data.gov.sg"
+        columns:
+          - name: currency_pair
+            description: "Currency name e.g. US Dollar"
+          - name: rate_month
+            description: "Month in format '2024Jan'"
+          - name: exchange_rate
+            description: "SGD per unit of foreign currency"
+          - name: ingested_at
+            description: "Timestamp when this row was ingested"
+
+      - name: bronze_trade_raw
+        description: "Singapore merchandise imports and exports by commodity, monthly"
+        columns:
+          - name: commodity_category
+            description: "Commodity group name"
+          - name: trade_month
+            description: "Month in format '2024Jan'"
+          - name: trade_value_sgd_million
+            description: "Trade value in SGD millions"
+          - name: trade_type
+            description: "Either imports or exports"
+          - name: ingested_at
+            description: "Timestamp when this row was ingested"

@@ -94,11 +94,13 @@ def transform(records: list) -> pd.DataFrame:
     df = pd.DataFrame(records)
     df = df.drop(columns=["_id"], errors="ignore")
 
-    # Identify the commodity/category column — may differ between datasets
+    # Normalise category column name — imports uses 'DataSeries', exports uses 'Data Series Text'
+    if "Data Series Text" in df.columns:
+        df = df.rename(columns={"Data Series Text": "DataSeries"})
+
     id_cols    = ["DataSeries", "trade_type"]
     month_cols = [c for c in df.columns if c not in id_cols]
 
-    # Unpivot — same pattern as FX script
     df_long = df.melt(
         id_vars    = id_cols,
         value_vars = month_cols,

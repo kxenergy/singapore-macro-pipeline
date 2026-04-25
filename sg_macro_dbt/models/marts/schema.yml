@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: mart_sg_macro
+    description: "Gold mart joining CPI, FX and trade into one macro intelligence table"
+    columns:
+      - name: period_date
+        description: "Reference month"
+        data_tests:
+          - not_null
+          - unique
+      - name: cpi_value
+        data_tests:
+          - not_null
+      - name: period_year
+        data_tests:
+          - not_null

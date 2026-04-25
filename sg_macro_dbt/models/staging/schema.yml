@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: stg_cpi
+    description: "Cleaned Singapore CPI data with YoY and MoM calculations"
+    columns:
+      - name: cpi_category
+        description: "CPI sub-category"
+        data_tests:
+          - not_null
+      - name: period_date
+        description: "First day of the reference month"
+        data_tests:
+          - not_null
+      - name: cpi_value
+        description: "CPI index value"
+        data_tests:
+          - not_null
+
+  - name: stg_fx
+    description: "SGD exchange rates for key currencies, monthly"
+    columns:
+      - name: currency_pair
+        description: "Currency name"
+        data_tests:
+          - not_null
+          - accepted_values:
+             arguments:
+              values: ['US Dollar','Renminbi','Euro','Malaysian Ringgit',
+                       'Japanese Yen','Sterling Pound','Australian Dollar']
+      - name: period_date
+        data_tests:
+          - not_null
+      - name: sgd_per_foreign_unit
+        data_tests:
+          - not_null
+
+  - name: stg_trade
+    description: "Singapore merchandise trade by commodity, monthly"
+    columns:
+      - name: trade_type
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['imports','exports']
+      - name: period_date
+        data_tests:
+          - not_null
+      - name: trade_value_sgd_million
+        data_tests:
+          - not_null
