@@ -99,8 +99,21 @@ joined as (
     left join cny_sgd      cny on cpi.period_date = cny.period_date
     left join total_imports imp on cpi.period_date = imp.period_date
     left join total_exports exp on cpi.period_date = exp.period_date
+),
+
+-- Join to calendar dimension for richer time attributes
+final as (
+    select
+        j.*,
+        cal.month_name,
+        cal.month_abbr,
+        cal.quarter,
+        cal.sg_trade_season
+    from joined j
+    left join {{ ref('dim_calendar') }} cal
+        on j.period_date = cal.period_date
 )
 
-select * from joined
+select * from final
 where period_date >= '1999-01-01'
 order by period_date desc

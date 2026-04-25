@@ -110,3 +110,16 @@ for any orchestrator.
 **Domestic exports only** — The data.gov.sg exports dataset covers domestic
 exports, not re-exports. Singapore's entrepot re-export trade is substantial
 and would be added in a production version using a separate SingStat table.
+
+## Day 1 Built Summary Log
+
+3 live government APIs ingested         ✓
+52,034 rows across 3 Bronze tables      ✓
+Exponential backoff + retry logic       ✓
+Idempotent pipeline — safe to rerun     ✓
+Medallion architecture implemented      ✓
+4 dbt models with full lineage          ✓
+15 automated data quality tests         ✓
+327 rows of joined macro intelligence   ✓
+Portfolio README written                ✓
+Everything on GitHub                    ✓

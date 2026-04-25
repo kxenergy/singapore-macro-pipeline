@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: mart_sg_macro
+  - name: fct_sg_macro_monthly
     description: "Gold mart joining CPI, FX and trade into one macro intelligence table"
     columns:
       - name: period_date

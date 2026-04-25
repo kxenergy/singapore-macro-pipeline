@@ -1,0 +1,29 @@
+name: Singapore Macro Pipeline
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'  # Run at 9am on the 1st of every month
+  workflow_dispatch:       # Manual trigger from GitHub UI
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-core dbt-duckdb duckdb requests pandas
+
+      - name: Run dbt transformations
+        run: |
+          cd sg_macro_dbt
+          dbt run
+          dbt test
