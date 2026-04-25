@@ -42,21 +42,18 @@ engineering thinking.
 
 ## Architecture — Phase 1 (Current)
 
-EXTRACT                         TRANSFORM                    SERVE
-───────                         ─────────                    ─────
-SingStat API (CPI)              Bronze Layer                 Gold Layer
-5,000 rows                    Raw immutable data           fct_sg_macro_monthly
-23 categories                 Ingestion timestamps         327 joined rows
-1961 → 2026      ──────────►  Never modified   ──────────► Tested & documented
-MAS / data.gov.sg               Silver Layer                 Evidence.dev
-5,332 rows                    Typed columns                3-page dashboard
-15 currencies                 Renamed fields               Live at localhost:3000
-1988 → 2024      ──────────►  Unpivoted rows   ──────────►
-Business logic               GitHub Actions
-Enterprise SG                                                Monthly schedule
-42,702 rows                   dbt Core                     Auto-runs on push
-75 categories                 5 models
-1976 → 2026      ──────────►  15 quality tests ──────────►
+### How Data Flows
+
+| Stage | Source | Tool | Output |
+|---|---|---|---|
+| Extract | SingStat API (CPI) | Python + requests | 5,000 rows, 23 categories, 1961–2026 |
+| Extract | MAS via data.gov.sg (FX) | Python + pagination | 5,332 rows, 15 currencies, 1988–2024 |
+| Extract | Enterprise SG (Trade) | Python + backoff | 42,702 rows, 75 categories, 1976–2026 |
+| Load | All three sources | DuckDB | Bronze layer — raw, immutable, timestamped |
+| Transform | Bronze → Silver | dbt staging models | Typed, renamed, unpivoted |
+| Transform | Silver → Gold | dbt mart models | Joined, tested, documented |
+| Serve | Gold mart | Evidence.dev | 3-page live dashboard |
+| Schedule | On push + monthly | GitHub Actions | Fully automated |
 
 ### Medallion Layers
 
@@ -112,19 +109,18 @@ Full traceability from government API response to dashboard number.
 **Structured logging** — Every pipeline run produces a dated log file. Errors are 
 captured with full stack traces. Silent failures are not possible.
 
-### Transformation — dbt Models
+### Transformation — dbt Models Structure
 
-models/
-├── staging/                    # Silver layer — one model per source
-│   ├── sources.yml             # Source definitions and freshness checks
-│   ├── schema.yml              # Column tests and descriptions
-│   ├── stg_cpi.sql             # CPI: parse dates, cast types, YoY window function
-│   ├── stg_fx.sql              # FX: filter key currencies, add inverse rate
-│   └── stg_trade.sql           # Trade: unpivot, filter totals, cast values
-└── marts/                      # Gold layer — joined analytical tables
-├── schema.yml              # Data quality tests on final output
-├── dim_calendar.sql        # Date dimension with quarter, season, month name
-└── fct_sg_macro_monthly.sql # Central fact table joining all three sources
+| Layer | File | Purpose |
+|---|---|---|
+| Silver | `staging/sources.yml` | Source definitions and freshness checks |
+| Silver | `staging/schema.yml` | Column tests and descriptions |
+| Silver | `staging/stg_cpi.sql` | CPI: parse dates, cast types, YoY window function |
+| Silver | `staging/stg_fx.sql` | FX: filter key currencies, add inverse rate |
+| Silver | `staging/stg_trade.sql` | Trade: unpivot, filter totals, cast values |
+| Gold | `marts/schema.yml` | Data quality tests on final output |
+| Gold | `marts/dim_calendar.sql` | Date dimension with quarter, season, month name |
+| Gold | `marts/fct_sg_macro_monthly.sql` | Central fact table joining all three sources |
 
 ### Data Quality — 15 Automated Tests
 
@@ -224,31 +220,22 @@ dbt docs serve
 
 ## Project Structure
 
-singapore_macro_pipeline/
-├── .github/
-│   └── workflows/
-│       └── pipeline.yml        # GitHub Actions — runs dbt on schedule
-├── ingestion/                  # Python extraction scripts
-│   ├── ingest_cpi.py           # SingStat CPI API
-│   ├── ingest_mas_fx.py        # MAS exchange rates via data.gov.sg
-│   ├── ingest_trade.py         # Enterprise SG trade via data.gov.sg
-│   ├── export_csv.py           # Export Gold mart to CSV for dashboard
-│   └── verify_db.py            # Bronze layer verification script
-├── sg_macro_dbt/               # dbt project
-│   └── models/
-│       ├── staging/            # Silver layer (3 models)
-│       └── marts/              # Gold layer (2 models)
-├── dashboard/                  # Evidence.dev dashboard
-│   ├── pages/
-│   │   ├── index.md            # Executive summary
-│   │   ├── analysis.md         # Full signal analysis
-│   │   └── pipeline.md        # Pipeline architecture
-│   └── sources/
-│       └── sg_macro/           # CSV data source for dashboard
-├── data/
-│   └── warehouse/              # DuckDB database (gitignored)
-├── logs/                       # Pipeline execution logs (gitignored)
-└── README.md
+| Path | Contents |
+|---|---|
+| `.github/workflows/pipeline.yml` | GitHub Actions — monthly schedule and push trigger |
+| `ingestion/ingest_cpi.py` | SingStat CPI API ingestion |
+| `ingestion/ingest_mas_fx.py` | MAS exchange rates ingestion |
+| `ingestion/ingest_trade.py` | Enterprise SG trade ingestion |
+| `ingestion/export_csv.py` | Export Gold mart to CSV for dashboard |
+| `ingestion/verify_db.py` | Bronze layer verification script |
+| `sg_macro_dbt/models/staging/` | Silver layer — 3 dbt models |
+| `sg_macro_dbt/models/marts/` | Gold layer — 2 dbt models |
+| `dashboard/pages/index.md` | Executive summary dashboard |
+| `dashboard/pages/analysis.md` | Full signal analysis dashboard |
+| `dashboard/pages/pipeline.md` | Pipeline architecture dashboard |
+| `dashboard/sources/sg_macro/` | CSV data source for dashboard |
+| `data/warehouse/` | DuckDB database (gitignored) |
+| `logs/` | Pipeline execution logs (gitignored) |
 
 ---
 
