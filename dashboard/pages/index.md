@@ -31,7 +31,7 @@ limit 1
 ```sql annual_clean
 select
     cast(period_year as integer)         as year,
-    round(avg(cpi_yoy_pct) * 100, 1)    as avg_cpi_yoy,
+    round(avg(cpi_yoy_pct) * 100, 1) as avg_inflation,
     round(avg(usd_sgd), 4)               as usd_sgd,
     round(sum(imports_sgd_bn), 0)        as imports_sgd_bn,
     case
