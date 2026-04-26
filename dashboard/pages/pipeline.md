@@ -205,8 +205,6 @@ This project demonstrates five competencies that define a professional data engi
 
 ## The Architecture in One Diagram
 
-## The Architecture in One Diagram
-
 **Extract:** SingStat API (CPl) → Python + exponential backoff → Bronze layer
 
 **Extract:** MAS via data.gov.sg (FX) → Python + pagination → Bronze layer

@@ -2,7 +2,7 @@
 title: Singapore Macro Intelligence
 ---
 
-[Full Analysis](./analysis) | [Pipeline Architecture](../pipeline) | [GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
+[Full Analysis](/analysis) | [Pipeline Architecture](/pipeline) | [GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
 
 ```sql latest
 select *
