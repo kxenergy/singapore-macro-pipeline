@@ -1,8 +1,8 @@
-[Executive Summary](/) · [Full Analysis](./analysis) · [GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
-
 ---
 title: Pipeline Architecture — Singapore Macro Intelligence
 ---
+
+[Executive Summary](/) | [Full Analysis](/analysis) | [GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
 
 ```sql pipeline_stats
 select 'SingStat' as source, 'CPI by category' as dataset, 'Monthly' as frequency, '1961' as since, 5000 as rows, 23 as categories
@@ -66,7 +66,7 @@ union all select 'Trade', 42702
 select '15 of 15' as tests_passing, '100' as pass_rate, '3' as sources_monitored, '5' as models_tested
 ```
 
-[Back to Executive Summary](/) · [Back to Full Analysis](./analysis)
+[Back to Executive Summary](/) | [Back to Full Analysis](/analysis)
 
 <h1 style="font-size:2rem; font-weight:700; margin:2rem 0 0.25rem; line-height:1.2;">
 How this dashboard stays trustworthy<br>
@@ -205,30 +205,17 @@ This project demonstrates five competencies that define a professional data engi
 
 ## The Architecture in One Diagram
 
-```
-EXTRACT                    TRANSFORM                      SERVE
---------                   ---------                      -----
+## The Architecture in One Diagram
 
-SingStat API               Bronze Layer                   Gold Layer
-(CPI data)    ──────────►  Raw JSON/CSV     ──────────►   Joined analytical
-                           Ingestion ts                   mart table
-                           Never modified                 Tested
-MAS API                                                   Documented
-(FX rates)    ──────────►  Silver Layer     ──────────►
-                           Typed columns                  Evidence.dev
-                           Renamed fields                 Dashboard
-EnterpriseSG               Unpivoted rows
-(Trade data)  ──────────►  Business logic                GitHub Actions
-                                                          Monthly schedule
-                                |
-                           dbt Core
-                           15 tests
-                           5 models
-                           Lineage graph
-                           Auto-documentation
-```
+**Extract:** SingStat API (CPl) → Python + exponential backoff → Bronze layer
 
----
+**Extract:** MAS via data.gov.sg (FX) → Python + pagination → Bronze layer
+
+**Extract:** Enterprise SG (Trade) → Python + idempotent load → Bronze layer
+
+**Transform:** Bronze → dbt Core (5 models, 15 tests) → Silver → Gold
+
+**Serve:** Gold layer → DuckDB → Evidence.dev dashboard
 
 ## Why This Matters for Your Business
 

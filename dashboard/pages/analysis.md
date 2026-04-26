@@ -1,10 +1,8 @@
-[Executive Summary](/) · [Pipeline Architecture](./pipeline) · [GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
-
 ---
 title: Full Signal Analysis — Singapore Macro Intelligence
 ---
 
-[Back to Executive Summary](/)
+[Executive Summary](/) | [Pipeline Architecture](/pipeline) | [GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
 
 ```sql cpi_history
 select
@@ -256,17 +254,15 @@ This dashboard is a data product — automated, tested, versioned, trusted.
 
 15 automated dbt tests validate every source record before it reaches this page. Idempotent ingestion scripts prevent duplicate data. Every raw record carries an ingestion timestamp — full audit trail from government API to dashboard. Schema changes in source APIs fail loudly rather than silently serving wrong numbers.
 
-```
-SingStat API (CPI)       Python + exponential backoff   Bronze layer
-MAS / data.gov.sg (FX)   Pagination + retry logic       Silver layer
-EnterpriseSG (Trade)     Idempotent load pattern        Gold layer
-                                    |
-                         dbt Core — 5 models, 15 tests
-                                    |
-                         DuckDB — sub-second queries
-                                    |
-                         Evidence.dev — this dashboard
-```
+**Extract:** SingStat API (CPI) — Python + exponential backoff — Bronze layer
+
+**Extract:** MAS via data.gov.sg (FX) — Python + pagination — Bronze layer  
+
+**Extract:** Enterprise SG (Trade) — Python + idempotent load — Bronze layer
+
+**Transform:** Bronze to Silver to Gold — dbt Core, 5 models, 15 tests
+
+**Serve:** Gold layer — DuckDB — Evidence.dev dashboard
 
 The same patterns are used by data teams at DBS Bank, GovTech Singapore, and commodity trading firms running production analytical systems.
 
