@@ -5,21 +5,23 @@ import logging
 import os
 from datetime import datetime, timezone
 
+# ── Portable paths ─────────────────────────────────────────────────────────────
+BASE_DIR  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH   = os.path.join(BASE_DIR, "data", "warehouse", "sg_macro.duckdb")
+LOG_PATH  = os.path.join(BASE_DIR, "logs", "ingest_cpi.log")
+RAW_TABLE = "bronze_cpi_raw"
+API_URL   = "https://tablebuilder.singstat.gov.sg/api/table/tabledata/M213751"
+
 # ── Logging setup ──────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  %(levelname)s  %(message)s",
     handlers=[
-        logging.FileHandler("../logs/ingest_cpi.log"),
+        logging.FileHandler(LOG_PATH),
         logging.StreamHandler()
     ]
 )
 log = logging.getLogger(__name__)
-
-# ── Config ─────────────────────────────────────────────────────────────────────
-API_URL = "https://tablebuilder.singstat.gov.sg/api/table/tabledata/M213751"
-DB_PATH = r"C:\Users\Kevin\singapore_macro_pipeline\data\warehouse\sg_macro.duckdb"
-RAW_TABLE = "bronze_cpi_raw"
 
 # ── Extract ────────────────────────────────────────────────────────────────────
 def extract() -> dict:

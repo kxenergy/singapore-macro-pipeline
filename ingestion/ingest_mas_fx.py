@@ -1,3 +1,4 @@
+import os
 import time
 import requests
 import duckdb
@@ -5,24 +6,24 @@ import pandas as pd
 import logging
 from datetime import datetime, timezone
 
+# ── Portable paths ─────────────────────────────────────────────────────────────
+BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH    = os.path.join(BASE_DIR, "data", "warehouse", "sg_macro.duckdb")
+LOG_PATH   = os.path.join(BASE_DIR, "logs", "ingest_mas_fx.log")
+RAW_TABLE  = "bronze_fx_raw"
+DATASET_ID = "d_3c62d5eed03c40aeafbb6d0fa324e976"
+BASE_URL   = f"https://data.gov.sg/api/action/datastore_search?resource_id={DATASET_ID}"
+
 # ── Logging setup ──────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  %(levelname)s  %(message)s",
     handlers=[
-        logging.FileHandler("../logs/ingest_mas_fx.log"),
+        logging.FileHandler(LOG_PATH),
         logging.StreamHandler()
     ]
 )
 log = logging.getLogger(__name__)
-
-# ── Config ─────────────────────────────────────────────────────────────────────
-# data.gov.sg API - open, no auth, free forever
-# Dataset: Exchange Rates (Average For Period), Monthly - published by MAS/SingStat
-DATASET_ID = "d_3c62d5eed03c40aeafbb6d0fa324e976"
-BASE_URL   = f"https://data.gov.sg/api/action/datastore_search?resource_id={DATASET_ID}"
-DB_PATH    = r"C:\Users\Kevin\singapore_macro_pipeline\data\warehouse\sg_macro.duckdb"
-RAW_TABLE  = "bronze_fx_raw"
 
 
 

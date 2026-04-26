@@ -1,3 +1,4 @@
+import os
 import requests
 import duckdb
 import pandas as pd
@@ -5,26 +6,27 @@ import logging
 import time
 from datetime import datetime, timezone
 
+# ── Portable paths ─────────────────────────────────────────────────────────────
+BASE_DIR  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH   = os.path.join(BASE_DIR, "data", "warehouse", "sg_macro.duckdb")
+LOG_PATH  = os.path.join(BASE_DIR, "logs", "ingest_trade.log")
+RAW_TABLE = "bronze_trade_raw"
+BASE_URL  = "https://data.gov.sg/api/action/datastore_search"
+DATASETS  = {
+    "imports": "d_b89e35ce38cb93a17f5c016e71f50690",
+    "exports": "d_2cd9992cebbe66bfa0b756645ba249b3",
+}
+
 # ── Logging setup ──────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  %(levelname)s  %(message)s",
     handlers=[
-        logging.FileHandler("../logs/ingest_trade.log"),
+        logging.FileHandler(LOG_PATH),
         logging.StreamHandler()
     ]
 )
 log = logging.getLogger(__name__)
-
-# ── Config ─────────────────────────────────────────────────────────────────────
-# Both datasets from data.gov.sg — same API pattern, two dataset IDs
-DATASETS = {
-    "imports": "d_b89e35ce38cb93a17f5c016e71f50690",  # Merchandise Imports By Commodity Division, Monthly
-    "exports": "d_2cd9992cebbe66bfa0b756645ba249b3",  # Domestic Exports By Commodity Group, Monthly
-}
-BASE_URL  = "https://data.gov.sg/api/action/datastore_search"
-DB_PATH   = r"C:\Users\Kevin\singapore_macro_pipeline\data\warehouse\sg_macro.duckdb"
-RAW_TABLE = "bronze_trade_raw"
 
 # ── Extract — reusable paginated fetch with backoff ────────────────────────────
 def fetch_dataset(dataset_id: str, trade_type: str) -> list:
