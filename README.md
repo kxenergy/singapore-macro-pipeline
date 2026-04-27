@@ -1,3 +1,6 @@
+## 🔴 Live Dashboard
+**[sgmedallion.netlify.app](https://sgmedallion.netlify.app)**
+
 # Singapore Macro Intelligence Pipeline
 
 An end-to-end, production-grade data engineering pipeline ingesting, transforming, 
