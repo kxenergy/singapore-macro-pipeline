@@ -270,4 +270,6 @@ The same patterns are used by data teams at DBS Bank, GovTech Singapore, and com
 
 **Pipeline last executed:** April 2026 · Tests: 15 of 15 passing · Models: 5
 
-[View full source code, architecture, and test results on GitHub](https://github.com/kxenergy/singapore-macro-pipeline)
+---
+
+<!-- ANALYSIS FOOTER START -->

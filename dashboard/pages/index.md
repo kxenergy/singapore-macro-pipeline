@@ -220,8 +220,4 @@ The window closes when the next commodity shock, supply chain disruption, or geo
 
 ---
 
-<p style="font-size:0.85rem; color:#9ca3af; margin-top:2rem;">
-Data: SingStat (CPI since 1961) · MAS via data.gov.sg (15 currencies since 1988) · Enterprise Singapore (trade since 1976)<br>
-Pipeline: Python ingestion · dbt Core (5 models, 15 automated quality tests) · DuckDB · Evidence.dev<br>
-Last executed: April 2026 · All tests passing · <a href="https://github.com/kxenergy/singapore-macro-pipeline">View source on GitHub</a>
-</p>
+<!-- INDEX FOOTER START -->

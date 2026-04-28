@@ -231,9 +231,4 @@ The business intelligence layer changes for every client and every problem. The 
 
 ---
 
-<p style="font-size:0.85rem; color:#9ca3af; margin-top:2rem; line-height:1.8;">
-Built with: Python 3.13 · dbt Core 1.11 · DuckDB 1.2 · Evidence.dev · Git + GitHub Actions<br>
-Architecture: Medallion (Bronze/Silver/Gold) · ELT pattern · Test-driven data quality<br>
-Pipeline last executed: April 2026 · 15 of 15 tests passing · 5 models · 53,034 rows processed<br>
-<a href="https://github.com/kxenergy/singapore-macro-pipeline">github.com/kxenergy/singapore-macro-pipeline</a>
-</p>
+<!-- PIPELINE FOOTER START -->
