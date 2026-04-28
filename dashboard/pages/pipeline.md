@@ -231,4 +231,10 @@ The business intelligence layer changes for every client and every problem. The 
 
 ---
 
-<!-- PIPELINE FOOTER START -->
+<p style="font-size:0.85rem; color:#9ca3af; margin-top:2rem; line-height:1.8;">
+Data: SingStat (CPI 1961–2026) · MAS via data.gov.sg (15 currencies 1988–2024) · Enterprise Singapore (trade 1976–2026)<br>
+Pipeline: Python 3.13 · DuckDB 1.2 · dbt Core 1.11 · Evidence.dev · Netlify · GitHub Actions (monthly CRON)<br>
+Architecture: Medallion (Bronze → Silver → Gold) · Star schema · ELT · idempotent loads · SGD 0/month infrastructure<br>
+AI development: Claude Sonnet 4.5 (Anthropic) · Claude.ai Projects · 10 sessions · Architecture through documentation<br>
+Last executed: April 2026 · 15 of 15 tests passing · <a href="https://github.com/kxenergy/singapore-macro-pipeline">github.com/kxenergy/singapore-macro-pipeline</a> · <a href="https://dbdiagram.io/d/SINGAPORE-MACRO-69f00e85ddb9320fdc6e203e">Star schema</a>
+</p>
